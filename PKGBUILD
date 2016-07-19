@@ -4,7 +4,7 @@
 
 pkgname=mapnik
 pkgver=3.0.10
-pkgrel=2
+pkgrel=3
 pkgdesc="Free Toolkit for developing mapping applications. Above all Mapnik is about rendering beautiful maps"
 arch=('i686' 'x86_64')
 url="http://mapnik.org/"
@@ -31,6 +31,7 @@ build() {
   scons configure \
     PREFIX="/usr" \
     INPUT_PLUGINS=all \
+    XMLPARSER=libxml2 \
     DESTDIR="$pkgdir"
   scons $MAKEFLAGS
 }
