@@ -3,10 +3,10 @@
 # Contributor: David Dent <thewinch@gmail.com>
 # Contributor: orbisvicis <orbisvicis@gmail.com>
 
-pkgname=mapnik
+pkgname=mapnik-3.1
 pkgver=3.1.0
-pkgrel=23
-pkgdesc="Free Toolkit for developing mapping applications and rendering beautiful maps"
+pkgrel=2
+pkgdesc="Free Toolkit for developing mapping applications and rendering beautiful maps, with Proj4 support"
 arch=('x86_64')
 url="https://mapnik.org/"
 license=('LGPL')
@@ -19,14 +19,16 @@ source=(https://github.com/$pkgname/$pkgname/releases/download/v$pkgver/$pkgname
         gcc-13.patch
         boost-1.83.patch
         libxml2-2.12.patch
-        mapnik-gcc14.patch)
+        mapnik-gcc14.patch
+        proj.patch)
 sha256sums=('43d76182d2a975212b4ad11524c74e577576c11039fdab5286b828397d8e6261'
             'b80085fba71ea6ecd86ff98ebdf652490bf56507cb798076192ab3ce136f5eeb'
             '79a85ddba3ec17b86cb216e21442611498a9f2612f03e98708057b3c3a6e8b06'
             '84ddba271d74fd4ed1d26501789c50c5e6bda509c238986eb69f96b10cf1465a'
             '356271f4550c2b370ae48bbce9cebb58c5803507f2b14bc8e84f3813871d0645'
             'f56d43aab85750505d56aa92f8f34453f4344e76a7ccdf394e874245b05990c3'
-            '086c57f5907c2e3f378f1f747dce59cf7ce5e5cffdd7c3779414dab2405eaed2')
+            '086c57f5907c2e3f378f1f747dce59cf7ce5e5cffdd7c3779414dab2405eaed2'
+            '567512661a0601691335cb7defc5c156ba2c37c82cc5b2056a547c4f473876a9')
 
 prepare() {
   cd "${srcdir}"/$pkgname-v$pkgver
@@ -49,6 +51,9 @@ prepare() {
 
   # Fix build with GCC 14
   patch -p1 -i ../mapnik-gcc14.patch
+
+  # Add Proj4 support
+  patch -p1 -i ../proj.patch
 }
 
 build() {
@@ -60,7 +65,7 @@ build() {
     DESTDIR="$pkgdir" \
     CUSTOM_CXXFLAGS="$CXXFLAGS -ffat-lto-objects" \
     CUSTOM_LDFLAGS="$LDFLAGS" \
-    CUSTOM_DEFINES="-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1"
+    CUSTOM_DEFINES="-DMAPNIK_USE_PROJ4"
   scons $(expr "$MAKEFLAGS" : '.*\(\-j[0-9]\+\)')
 }
 
