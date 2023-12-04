@@ -5,7 +5,7 @@
 
 pkgname=mapnik-3.1
 pkgver=3.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Free Toolkit for developing mapping applications and rendering beautiful maps, with Proj4 support"
 arch=('x86_64')
 url="https://mapnik.org/"
@@ -18,13 +18,15 @@ source=(https://github.com/$pkgname/$pkgname/releases/download/v$pkgver/$pkgname
         scons4.patch
         gcc-13.patch
         boost-1.83.patch
-        proj.patch)
+        proj.patch
+        libxml2-2.12.patch)
 sha256sums=('43d76182d2a975212b4ad11524c74e577576c11039fdab5286b828397d8e6261'
             'b80085fba71ea6ecd86ff98ebdf652490bf56507cb798076192ab3ce136f5eeb'
             '79a85ddba3ec17b86cb216e21442611498a9f2612f03e98708057b3c3a6e8b06'
             '84ddba271d74fd4ed1d26501789c50c5e6bda509c238986eb69f96b10cf1465a'
             '356271f4550c2b370ae48bbce9cebb58c5803507f2b14bc8e84f3813871d0645'
-            '567512661a0601691335cb7defc5c156ba2c37c82cc5b2056a547c4f473876a9')
+            '567512661a0601691335cb7defc5c156ba2c37c82cc5b2056a547c4f473876a9'
+            'f56d43aab85750505d56aa92f8f34453f4344e76a7ccdf394e874245b05990c3')
 
 prepare() {
   cd "${srcdir}"/$pkgname-v$pkgver
@@ -41,6 +43,9 @@ prepare() {
 
   # Add Proj4 support
   patch -p1 -i ../proj.patch
+
+  # Fix build with libxml2 2.12
+  patch -p1 -i ../libxml2-2.12.patch
 }
 
 build() {
