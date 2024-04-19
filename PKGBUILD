@@ -1,19 +1,22 @@
-# Maintainer: Jaroslav Lichtblau <svetlemodry@archlinux.org>
+# Maintainer: Tom Kazimiers <tom@voodoo-arts.net>
+# Contributor: Jaroslav Lichtblau <svetlemodry@archlinux.org>
 # Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
 # Contributor: David Dent <thewinch@gmail.com>
 # Contributor: orbisvicis <orbisvicis@gmail.com>
 
-pkgname=mapnik-3.1
+pkgname=mapnik-3.1-proj
 pkgver=3.1.0
-pkgrel=2
-pkgdesc="Free Toolkit for developing mapping applications and rendering beautiful maps, with Proj4 support"
+pkgrel=1
+pkgdesc="Free Toolkit for developing mapping applications and rendering beautiful maps. Compiled with Proj support."
 arch=('x86_64')
+provides=('mapnik=3.1.0')
 url="https://mapnik.org/"
 license=('LGPL')
 depends=('boost-libs' 'cairo' 'freetype2' 'gdal' 'harfbuzz' 'icu' 'libjpeg-turbo' 'libpng'
          'libtiff' 'libwebp' 'libxml2' 'postgresql-libs' 'proj' 'sqlite' 'zlib')
+conflicts=('mapnik' 'mapnik-git')
 makedepends=('boost' 'scons')
-source=(https://github.com/$pkgname/$pkgname/releases/download/v$pkgver/$pkgname-v$pkgver.tar.bz2
+source=(https://github.com/mapnik/mapnik/releases/download/v$pkgver/mapnik-v$pkgver.tar.bz2
         boost-1.80.patch
         scons4.patch
         gcc-13.patch
@@ -31,7 +34,7 @@ sha256sums=('43d76182d2a975212b4ad11524c74e577576c11039fdab5286b828397d8e6261'
             '567512661a0601691335cb7defc5c156ba2c37c82cc5b2056a547c4f473876a9')
 
 prepare() {
-  cd "${srcdir}"/$pkgname-v$pkgver
+  cd "${srcdir}"/mapnik-v$pkgver
   patch -Np1 -i ../boost-1.80.patch
 
   # Partial fix to build with SCons 4 (https://bugs.archlinux.org/task/71630)
@@ -57,7 +60,7 @@ prepare() {
 }
 
 build() {
-  cd "${srcdir}"/$pkgname-v$pkgver
+  cd "${srcdir}"/mapnik-v$pkgver
   scons configure  FAST=True \
     PREFIX="/usr" \
     INPUT_PLUGINS=all \
@@ -70,6 +73,6 @@ build() {
 }
 
 package(){
-  cd "${srcdir}"/$pkgname-v$pkgver
+  cd "${srcdir}"/mapnik-v$pkgver
   scons install
 }
