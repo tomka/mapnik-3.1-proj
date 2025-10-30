@@ -6,7 +6,7 @@
 
 pkgname=mapnik-3.1-proj
 pkgver=3.1.0
-pkgrel=2
+pkgrel=6
 pkgdesc="Free Toolkit for developing mapping applications and rendering beautiful maps. Compiled with Proj support."
 arch=('x86_64')
 provides=('mapnik=3.1.0')
@@ -24,7 +24,8 @@ source=(https://github.com/mapnik/mapnik/releases/download/v$pkgver/mapnik-v$pkg
         libxml2-2.12.patch
         mapnik-gcc14.patch
         proj.patch
-        boost-1.85.patch)
+        boost-1.85.patch
+        boost-1.89.patch)
 sha256sums=('43d76182d2a975212b4ad11524c74e577576c11039fdab5286b828397d8e6261'
             'b80085fba71ea6ecd86ff98ebdf652490bf56507cb798076192ab3ce136f5eeb'
             '79a85ddba3ec17b86cb216e21442611498a9f2612f03e98708057b3c3a6e8b06'
@@ -33,7 +34,8 @@ sha256sums=('43d76182d2a975212b4ad11524c74e577576c11039fdab5286b828397d8e6261'
             'f56d43aab85750505d56aa92f8f34453f4344e76a7ccdf394e874245b05990c3'
             '086c57f5907c2e3f378f1f747dce59cf7ce5e5cffdd7c3779414dab2405eaed2'
             '567512661a0601691335cb7defc5c156ba2c37c82cc5b2056a547c4f473876a9'
-            '23c26604fd191459da70aa29fc9cf6578e0f3ca75c9240150b3f2247d92cb070')
+            '23c26604fd191459da70aa29fc9cf6578e0f3ca75c9240150b3f2247d92cb070'
+            '918f9fb793647349c8b437ea1f0b15746e1f5c6880fb2aaf7dec0a30756d57b4')
 
 prepare() {
   cd "${srcdir}"/mapnik-v$pkgver
@@ -62,6 +64,9 @@ prepare() {
 
   # Fix build with boost 1.85
   patch -p1 -i ../boost-1.85.patch
+
+  # Fix build with boost 1.89
+  patch -p1 -i ../boost-1.89.patch
 }
 
 build() {
